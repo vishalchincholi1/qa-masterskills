@@ -1,0 +1,16 @@
+{
+  "name": "blackbox-security-audit-skill",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Portable, non-intrusive black-box web security audit tooling and report generator. Parameterize config.json per engagement.",
+  "scripts": {
+    "collect": "bash scripts/run_audit.sh",
+    "consent": "node scripts/consent_check.js",
+    "report": "node scripts/build_report.js .",
+    "pdf": "node scripts/export_pdf.js"
+  },
+  "dependencies": {
+    "docx": "^9.9.0",
+    "puppeteer-core": "^23.11.1"
+  }
+}

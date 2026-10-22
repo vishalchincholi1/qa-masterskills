@@ -1,0 +1,48 @@
+{
+  "engagement": {
+    "client": "Example Client Pvt. Ltd.",
+    "by": "Tekdi Technologies — QA Security",
+    "date": "1 January 2026",
+    "window": "1 January 2026, 09:00–10:00 UTC (headers, TLS, DNS, consent)",
+    "version": "1.0",
+    "classification": "CONFIDENTIAL — Restricted to named client recipients",
+    "overallPosture": "Moderate"
+  },
+  "userAgent": "Mozilla/5.0 (QA security audit - authorized)",
+  "rateLimitSeconds": 1,
+  "assets": [
+    ["Example Primary Site", "https://example.com", "Public website (CMS, CDN)"],
+    ["Example Secondary Site", "https://sub.example.com", "Public website (CMS, CDN)"]
+  ],
+  "domains": ["example.com", "sub.example.com"],
+  "paths": [
+    "/",
+    "/contact/",
+    "/privacy-policy/",
+    "/wp-json/wp/v2/users",
+    "/xmlrpc.php",
+    "/wp-cron.php",
+    "/readme.html",
+    "/.well-known/security.txt"
+  ],
+  "consentUrls": [
+    "https://example.com/",
+    "https://example.com/contact/"
+  ],
+  "branding": {
+    "blue": "2581C4",
+    "navy": "041C3B",
+    "teal": "66CCCC",
+    "charcoal": "38383E",
+    "muted": "6B7280",
+    "border": "D5DAE2",
+    "surface": "F7F8FA",
+    "footerText": "Tekdi Technologies · Security Assessment Report"
+  },
+  "chromePath": "C:/Program Files/Google/Chrome/Application/chrome.exe",
+  "output": {
+    "html": "report.html",
+    "docx": "report.docx",
+    "pdf": "Security_Assessment_Report.pdf"
+  }
+}

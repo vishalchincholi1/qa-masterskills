@@ -1,7 +1,7 @@
 # QA Skills — Complete Guide (Explained Simply)
 
 > Author: Vishal Chincholi
-> 36 skills. Every phase of software testing. Zero confusion — if you read this whole file.
+> 37 skills. Every phase of software testing, plus security. Zero confusion — if you read this whole file.
 
 ---
 
@@ -15,8 +15,9 @@ Imagine you are a QA tester. Every day you do the same kinds of work:
 - Running tests and tracking results
 - Reporting bugs
 - Closing out a test cycle
+- Checking a live website for security and privacy problems
 
-That is called the **STLC — Software Testing Life Cycle**. This folder has **36 pre-built AI skill files** — one for each specific job in that cycle.
+That is called the **STLC — Software Testing Life Cycle** (plus a security layer on top). This folder has **37 pre-built AI skill files** — one for each specific job in that cycle.
 
 Each skill is a folder. Inside the folder is a `SKILL.md` file. That file tells the AI (Claude, Copilot, or any AI agent) **exactly how to help you** with that task.
 
@@ -66,6 +67,12 @@ skills/
 │   ├── test-coverage-analyzer/
 │   └── test-closure-reporter/
 │
+├── 08-security-testing/           ← Phase 8: Check a live site for security & privacy gaps
+│   └── blackbox-web-security-audit/
+│       ├── config.json            ← Edit per engagement (targets, branding, metadata)
+│       ├── report-data.js         ← Edit per engagement (findings + report content)
+│       └── scripts/               ← Evidence collection + HTML/DOCX/PDF report generator
+│
 └── framework-packs/               ← Bonus: Automation tools (Playwright & Selenium)
     ├── playwright-pack/           ← 11 skills for Playwright (TypeScript)
     │   ├── pw-test-generator/
@@ -107,6 +114,7 @@ Ask yourself: "What am I trying to do right now?"
 - Writing test cases? → `04-test-case-development/test-case-writer`
 - Writing Playwright tests? → `framework-packs/playwright-pack/pw-test-generator`
 - Fixing a flaky Selenium test? → `framework-packs/selenium-pack/se-flaky-debugger`
+- Security-checking a live website? → `08-security-testing/blackbox-web-security-audit`
 
 ### Step 2 — Open the SKILL.md file inside that folder
 
@@ -470,6 +478,64 @@ Recommendation (ADVISORY): NO-GO — 3 open critical defects must be resolved fi
 
 ---
 
+### Phase 8 — Security Testing
+**Folder:** `08-security-testing/`
+
+This phase is different from phases 1–7. The others help you test a feature *before* it ships.
+This one checks a website that is *already live* for security and privacy problems — the way an
+outside attacker (or a privacy regulator) would see it. It is a full, runnable toolkit, not just
+a prompt file.
+
+#### `blackbox-web-security-audit`
+**What it does:** Runs a non-intrusive external ("black-box") security assessment of any set of
+public websites, then generates a professional report in three formats: an HTML page, an editable
+Word document, and a print-ready A4 PDF.
+
+**Why you need it:** Clients and auditors want proof that a website is configured safely and
+handles visitor data lawfully. This skill checks the things an unauthenticated visitor can see —
+no logins, no attacks, no risk to the site — and turns the evidence into a client-ready deliverable.
+It was built from a real engagement and generalized so you point it at any target.
+
+**What it checks:**
+- HTTP security headers (CSP, HSTS, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy)
+- TLS version, certificate, and HTTP→HTTPS redirect
+- Forms, third-party scripts, and Subresource Integrity (SRI)
+- Cookies and whether analytics/ad trackers fire **before** the visitor gives consent (GDPR / ePrivacy / DPDP)
+- WordPress attack surface: user enumeration, XML-RPC, wp-cron, exposed readme, version disclosure
+- Plugin/theme version inventory with public CVE lookup (Patchstack, WPScan, NVD)
+- Email authentication (SPF and DMARC)
+
+**The golden rule here is safety, not just review.** This skill only ever does passive, low-rate
+requests (GET/HEAD, ≤1 per second). It never brute-forces, fuzzes, injects payloads, submits forms,
+or touches authenticated areas. **You must get written authorization naming every in-scope domain
+before running it.** Every finding must cite an evidence file — no evidence, no finding.
+
+**How to use it (it runs locally, it is not just a prompt):**
+1. Edit `config.json` — your target domains, paths, consent URLs, branding, and report metadata.
+2. `npm install` (needs Node.js 18+ and Google Chrome).
+3. `npm run collect` — gathers headers, TLS, DNS and page bodies into `evidence/`.
+4. `npm run consent` — opens a fresh headless Chrome to record pre-consent cookies and trackers.
+5. Read the evidence, follow `SKILL.md` steps 1–5, and fill in `report-data.js` with your findings.
+6. `npm run report` then `npm run pdf` — produces the HTML, DOCX and PDF reports.
+
+**What you get back:** A structured report with an executive summary and severity counts, scope and
+methodology, CVSS v3.1-scored findings (only where a real attack path exists — hardening and
+compliance gaps are judgment-scored, not inflated), a WordPress component review, OWASP Top 10:2025
+coverage, a remediation roadmap, and appendices (recommended header config, OWASP WSTG test cases,
+tools, glossary).
+
+**Files in this folder:**
+- `SKILL.md` — the methodology: rules of engagement, the 5 analysis steps, and false-positive triage rules
+- `config.json` — the one file you edit per engagement (targets, branding, metadata)
+- `report-data.js` — findings and report content, shipped with a complete worked example to copy from
+- `scripts/run_audit.sh` — passive evidence collection (curl headers + bodies, TLS, SPF/DMARC)
+- `scripts/consent_check.js` — headless-Chrome pre-consent cookie and tracker capture
+- `scripts/build_report.js` — the report generator (HTML + DOCX); don't edit this per engagement
+- `scripts/export_pdf.js` — renders the HTML report to an A4 PDF
+- `README.md` — quick start and the per-engagement checklist
+
+---
+
 ## Framework Packs — Automation Skills
 **Folder:** `framework-packs/`
 
@@ -606,11 +672,18 @@ The phases feed into each other:
 ```
 Don't skip steps. If you try to write test cases without approved scenarios, the skill will tell you to go back.
 
+Phase 08 (security testing) runs on a live, deployed site and stands apart from this flow — reach for it whenever you need to assess a running website, not just at the end of a cycle.
+
 **Rule 4 — The AI never invents things.**
 If a field, locator, requirement, or data value is unknown, the AI will mark it as a TODO or ask you to provide it. It will never make something up and present it as real.
 
 **Rule 5 — Install only the skills you need.**
-You do not need all 36 skills active at once. Pick the one that matches your current task.
+You do not need all 37 skills active at once. Pick the one that matches your current task.
+
+**Rule 6 — For security testing, get authorization first.**
+The `blackbox-web-security-audit` skill touches real, live websites. Never point it at a domain you
+do not own or have written permission to test. Keep it passive and rate-limited, exactly as the
+skill specifies.
 
 ---
 
@@ -633,6 +706,7 @@ You do not need all 36 skills active at once. Pick the one that matches your cur
 | Why did this bug escape testing?                | `rca-analyzer`                          |
 | What requirements are not tested?               | `test-coverage-analyzer`                |
 | Write the end-of-cycle closure report           | `test-closure-reporter`                 |
+| Security & privacy audit of a live website      | `blackbox-web-security-audit`           |
 | Write a Playwright test from scratch            | `pw-test-generator`                     |
 | Build a Playwright Page Object                  | `pw-page-object-builder`                |
 | Create Playwright fixtures (auth, data setup)   | `pw-fixture-designer`                   |
